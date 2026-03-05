@@ -27,6 +27,7 @@ kwargs = dict(
     device="auto",
     dtype="float16",
     method=METHOD,
+    quantization="4bit",
 )
 if N_DIRECTIONS > 0:
     kwargs["n_directions"] = N_DIRECTIONS
@@ -37,11 +38,24 @@ if REFINEMENT_PASSES > 0:
 
 # Progress callback
 def on_stage(stage):
+    # Dynamically look for the stage identifier (usually 'name' or 'stage' in these kinds of event objects)
+    stage_key = getattr(stage, "name", getattr(stage, "stage", getattr(stage, "id", None)))
+    
+    # Safely get the description/message
+    stage_desc = getattr(stage, "description", getattr(stage, "message", getattr(stage, "status", "")))
+    
+    # Fallback debug catcher: if we STILL don't have a valid key, print the object's attributes
+    if stage_key is None:
+        print(f"\n[DEBUG] Available attributes on StageResult: {dir(stage)}")
+        stage_key = "unknown"
+
     icons = {"summon": "\u26a1", "probe": "\u2692", "distill": "\u269b",
              "excise": "\u2702", "verify": "\u2713", "rebirth": "\u2606"}
-    icon = icons.get(stage.key, "")
+             
+    icon = icons.get(stage_key, "")
+    
     print(f"\n{'='*60}")
-    print(f"{icon}  STAGE: {stage.key.upper()} — {stage.description}")
+    print(f"{icon}  STAGE: {str(stage_key).upper()} — {stage_desc}")
     print(f"{'='*60}")
 
 def on_log(msg):
