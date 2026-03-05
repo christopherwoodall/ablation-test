@@ -57,7 +57,24 @@ def build_llama_cpp():
         return str(quantize_bin)
 
     build_dir.mkdir(exist_ok=True)
-    run(["cmake", "..", "-DLLAMA_CUDA=ON", "-DCMAKE_BUILD_TYPE=Release"], cwd=str(build_dir))
+
+    # Try CUDA build first, fall back to CPU-only
+    cuda_flags = [
+        ["cmake", "..", "-DGGML_CUDA=ON", "-DCMAKE_BUILD_TYPE=Release"],
+        ["cmake", "..", "-DCMAKE_BUILD_TYPE=Release"],  # CPU fallback
+    ]
+    for flags in cuda_flags:
+        try:
+            print(f"Attempting build: {' '.join(flags)}")
+            run(flags, cwd=str(build_dir))
+            break
+        except subprocess.CalledProcessError:
+            print("Build config failed, trying fallback...")
+            # Wipe build dir before retry
+            import shutil
+            shutil.rmtree(str(build_dir))
+            build_dir.mkdir(exist_ok=True)
+
     run(["cmake", "--build", ".", "--config", "Release", "-j", "4"], cwd=str(build_dir))
 
     if not quantize_bin.exists():
