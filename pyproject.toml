@@ -11,6 +11,7 @@ dependencies = [
     "obliteratus @ git+https://github.com/elder-plinius/OBLITERATUS.git",
     "accelerate",
     "bitsandbytes",
+    "huggingface_hub",
 ]
 
 [project.scripts]
