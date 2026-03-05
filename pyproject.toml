@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ablation-test       = "ablation_test.test:main"
+ablation-test = "ablation_test.test:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["ablation_test"]
