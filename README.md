@@ -9,3 +9,13 @@ uv venv
 source .venv/bin/activate
 uv pip install -e .
 ```
+
+---
+
+## Run
+
+```bash
+ablation-make
+ablation-convert
+ablation-test
+```
