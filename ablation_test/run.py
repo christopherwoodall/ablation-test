@@ -11,7 +11,7 @@ if torch.cuda.is_available():
     print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
 
 
-MODEL = "Qwen/Qwen2.5-3B-Instruct"
+MODEL = "Qwen/Qwen3.5-4B"
 METHOD = "advanced"
 N_DIRECTIONS = 0
 REGULARIZATION = 0.3
