@@ -67,8 +67,7 @@ def build_llama_cpp():
 
 
 def install_conversion_deps():
-    run([sys.executable, "-m", "pip", "install", "gguf", "sentencepiece", "tiktoken",
-         "transformers", "--quiet"])
+    run(["uv", "pip", "install", "gguf", "sentencepiece", "tiktoken", "transformers"])
 
 
 def convert_to_fp16_gguf(model_dir: str, output_dir: str) -> Path:
