@@ -6,10 +6,10 @@ if torch.cuda.is_available():
     print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
 
 
-MODEL = "Qwen/Qwen2.5-7B-Instruct" 
+MODEL = "Qwen/Qwen2.5-3B-Instruct" 
 METHOD = "advanced"
 N_DIRECTIONS = 0
-REGULARIZATION = 0.0
+REGULARIZATION = 0.3
 REFINEMENT_PASSES = 0
 
 OUTPUT_DIR = "abliterated"
@@ -27,7 +27,11 @@ kwargs = dict(
     device="auto",
     dtype="float16",
     method=METHOD,
-    quantization="4bit",
+    # quantization="4bit",
+    # norm_preserve=False,
+    # # OR 
+    # quantization="8bit",
+    # norm_preserve=True,
 )
 if N_DIRECTIONS > 0:
     kwargs["n_directions"] = N_DIRECTIONS
